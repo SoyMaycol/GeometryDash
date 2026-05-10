@@ -177,51 +177,43 @@
   </div>
 
   <script src="script.js"></script>
+  <script src="Config/messages.js"></script>
   <script>
-        // Fetch the text file from GitHub
-        fetch('https://raw.githubusercontent.com/everywheredash/everywheredash.github.io/main/Config/RandomMessage.txt')
-            .then(response => response.text())
-            .then(text => {
-                const messages = text.split('\n'); // Split messages by newline
-                const randomIndex = Math.floor(Math.random() * messages.length);
-                const randomMessage = messages[randomIndex].trim(); // Remove leading/trailing spaces
+    function showRandomMessage() {
+        var messageElement = document.getElementById('randomMessage');
+        var messages = (window.GD_RANDOM_MESSAGES && window.GD_RANDOM_MESSAGES.length) ? window.GD_RANDOM_MESSAGES : ['Ready.'];
+        var randomIndex = Math.floor(Math.random() * messages.length);
+        messageElement.textContent = messages[randomIndex];
+      }
 
-                // Display the random message
-                document.getElementById('randomMessage').textContent = randomMessage;
-            })
-            .catch(error => {
-                console.error('Error fetching the text file:', error);
-            });
-  </script>
+    showRandomMessage();
 
+    var appElement = document.getElementById('app');
+      var launchScreen = document.getElementById('launch');
+      var loadingScreen = document.getElementById('loading');
+      var loadingInner = document.getElementById('loading-inner');
+      var errorScreen = document.getElementById('error');
+      var errorScreenMessage = document.getElementById('error-message');
+      var errorScreenStack = document.getElementById('error-stack');
 
-  <script>
-    const appElement = document.getElementById('app');
-    const launchScreen = document.getElementById('launch');
-    const loadingScreen = document.getElementById('loading');
-    const loadingInner = document.getElementById('loading-inner');
-    const errorScreen = document.getElementById('error');
-    const errorScreenMessage = document.getElementById('error-message');
-    const errorScreenStack = document.getElementById('error-stack');
-
-    const handleError = (error) => {
+      var handleError = function (error) {
       console.error(error);
-      if (!errorScreen.hidden) return;
+        if (!errorScreen.hidden) return;
       errorScreen.hidden = false;
       errorScreenMessage.textContent = '' + error;
       let debug = error && error.stack || 'no stack';
       debug += '\nUser agent: ' + navigator.userAgent;
       errorScreenStack.textContent = debug;
-    };
-    const setProgress = (progress) => {
+      };
+      var setProgress = function (progress) {
       if (loadingInner) loadingInner.style.width = progress * 100 + '%';
-    };
-    const interpolate = (a, b, t) => a + t * (b - a);
+      };
+      var interpolate = function (a, b, t) { return a + t * (b - a); };
 
-    try {
+      try {
       setProgress(0.1);
 
-      const scaffolding = new Scaffolding.Scaffolding();
+        var scaffolding = new Scaffolding.Scaffolding();
       scaffolding.width = 480;
       scaffolding.height = 360;
       scaffolding.resizeMode = "preserve-ratio";
@@ -230,7 +222,7 @@
       scaffolding.setup();
       scaffolding.appendTo(appElement);
 
-      const vm = scaffolding.vm;
+        var vm = scaffolding.vm;
       window.scaffolding = scaffolding;
       window.vm = scaffolding.vm;
       window.Scratch = {
@@ -241,7 +233,7 @@
         videoProvider: vm.runtime.ioDevices.video.provider
       };
 
-      scaffolding.setUsername("player####".replace(/#/g, () => Math.floor(Math.random() * 10)));
+        scaffolding.setUsername("player####".replace(/#/g, function () { return Math.floor(Math.random() * 10); }));
       scaffolding.setAccentColor("#006eff");
 
       try {
